@@ -193,15 +193,23 @@ WHERE e.EmployeeID = 24
 
 select * from [Projects] WHERE Projects.[Name] IN ('LL Touring Frame', 'Road-650', 'Touring Front Wheel', 'Bike Wash')
 
+
+
 --9TH
+SELECT e1.EmployeeID, e1.FirstName, e1.ManagerID,
+CASE
+	WHEN e1.ManagerID = 3 THEN 'Roberto'
+	else 'JoLynn'
+	END AS ManagerName
+FROM [Employees] AS e1 WHERE E1.[ManagerID] In (3, 7)
 
-SELECT e.EmployeeID, e.FirstName, e.ManagerID FROM [Employees] AS e WHERE e.FirstName IN(
-(
-select d.ManagerID
-from [Departments] as d
-WHERE d.ManagerID IS (3, 7))
+--where [ManagerID] In (3, 7)
+SELECT [FirstName] FROM [Employees] WHERE [EmployeeID] In (3, 7)
 
+--10th
+SELECT e1.EmployeeID, CONCAT(e1.FirstName, ' ', e1.LastName), e2.FirstName FROM Employees AS e1
+LEFT JOIN Employees as e2 ON e1.EmployeeID = e2.EmployeeID
 
-
-JOIN Departments AS d ON e.ManagerID = d.ManagerID
-WHERE e.EmployeeID IN (3, 7) 
+SELECT MIN(AVER) AS MinAverageSalary FROM (
+	SELECT DEPARTMENTID, AVG(SALARY) AS AverageSalary FROM Employees
+)

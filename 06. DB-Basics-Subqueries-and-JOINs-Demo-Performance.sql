@@ -196,20 +196,89 @@ select * from [Projects] WHERE Projects.[Name] IN ('LL Touring Frame', 'Road-650
 
 
 --9TH
-SELECT e1.EmployeeID, e1.FirstName, e1.ManagerID,
-CASE
-	WHEN e1.ManagerID = 3 THEN 'Roberto'
-	else 'JoLynn'
-	END AS ManagerName
-FROM [Employees] AS e1 WHERE E1.[ManagerID] In (3, 7)
+--SELECT e1.EmployeeID, e1.FirstName, e1.ManagerID,
+--CASE
+--	WHEN e1.ManagerID = 3 THEN 'Roberto'
+--	else 'JoLynn'
+--	END AS ManagerName
+--FROM [Employees] AS e1 WHERE E1.[ManagerID] In (3, 7)
 
 --where [ManagerID] In (3, 7)
-SELECT [FirstName] FROM [Employees] WHERE [EmployeeID] In (3, 7)
+--SELECT [FirstName] FROM [Employees] WHERE [EmployeeID] In (3, 7)
+
+--correct query below top 2
+SELECT e.EmployeeID, e.FirstName, e.ManagerID, e2.FirstName FROM [Employees] AS e JOIN 
+[Employees] as e2 ON e.ManagerID = e2.EmployeeID WHERE e2.EmployeeID IN (3, 7) ORDER BY E.EmployeeID
+
+select e.EmployeeID, e.FirstName, e.ManagerID as ManagerName from Employees as e JOIN
+Employees as d ON e.FirstName = d.FirstName
+
+SELECT [FirstName] FROM Employees where EmployeeID IN (3,7)
+
+SELECT * FROM [Employees]
+
+SELECT e.EmployeeID, e.FirstName, e.ManagerID, e1.FirstName FROM [Employees] as e JOIN 
+[Employees] AS e1 ON e.EmployeeID = e1.EmployeeID WHERE e.ManagerID IN (3, 7) ORDER BY e.EmployeeID
 
 --10th
-SELECT e1.EmployeeID, CONCAT(e1.FirstName, ' ', e1.LastName), e2.FirstName FROM Employees AS e1
-LEFT JOIN Employees as e2 ON e1.EmployeeID = e2.EmployeeID
+SELECT TOP(50) e.EmployeeID, CONCAT(e.FirstName, ' ' , e.LastName) AS [EmployeeName], CONCAT(e2.FirstName, ' ' , e2.LastName) AS [ManagerName], d.[Name] AS [DepartmentName] FROM Employees AS e
+JOIN Employees AS e2 on E.ManagerID = E2.EmployeeID
+JOIN Departments AS d ON e.DepartmentID = d.DepartmentID
+ORDER BY e.EmployeeID
+
+SELECT * FROM [Departments]
+
+--SELECT e1.EmployeeID, CONCAT(e1.FirstName, ' ', e1.LastName), e2.FirstName FROM Employees AS e1
+--LEFT JOIN Employees as e2 ON e1.EmployeeID = e2.EmployeeID
 
 SELECT MIN(AVER) AS MinAverageSalary FROM (
 	SELECT DEPARTMENTID, AVG(SALARY) AS AverageSalary FROM Employees
 )
+
+--11th
+SELECT * FROM Employees
+SELECT * FROM Departments
+
+SELECT sum(Salary) FROM Employees WHERE DepartmentID IN (
+SELECT Salary FROM Employees AS E 
+)
+
+
+
+USE [Geography]
+
+--12th
+SELECT * FROM Mountains
+
+SELECT * FROM [MountainsCountries] AS m JOIN
+[Mountains] AS m2 ON m.MountainId = m2.Id 
+JOIN [Peaks] AS p ON m2.Id = p.Id
+
+--CORRECT QUERY BELOW
+SELECT mc.CountryCode, m.MountainRange, p.PeakName, p.Elevation FROM [Mountains] as m 
+JOIN [Peaks] AS p ON m.Id = p.MountainId 
+JOIN MountainsCountries AS mc ON mc.MountainId = m.Id
+WHERE mc.CountryCode = 'BG' AND p.Elevation > 2835 ORDER BY p.Elevation DESC
+
+
+SELECT * FROM Peaks
+
+SELECT * FROM Mountains as m JOIN Peaks as p ON m.Id = p.MountainId
+
+--13TH
+SELECT mc.CountryCode, m.MountainRange, COUNT(m.MountainRange) FROM MountainsCountries AS mc JOIN [Mountains] as m ON mc.MountainId = m.Id GROUP BY m.MountainRange
+
+SELECT mc.CountryCode FROM MountainsCountries AS mc 
+ 
+ SELECT e. FROM (
+ SELECT * FROM Mountains
+ ) as e
+
+SELECT * FROM [Mountains]
+
+go
+--11th
+SELECT MIN(a.AverageSalary) as MinAverageSalary FROM (
+select e.DepartmentID, avg(e.Salary) AS AverageSalary FROM Employees as e GROUP BY e.DepartmentID) as a
+
+go
